@@ -1,33 +1,18 @@
 #let TEXT_SIZE = 12pt
 
-#let figura(imagen, ancho: 75%, alto: auto, leyenda: none) = {
-  let grosor = 1.25pt
-
-  figure(
-    rect(
-      stroke: grosor + rgb("#cccccc"),
-      inset: (grosor / 2) + 1.5pt,
-      image("../media/" + imagen, width: ancho, height: alto)
-    ),
-    caption: leyenda,
-    gap: 2em
-  )
-}
-
 #let formato(cabecera: [Lorem Ipsum], autores: ("Quispe Huillca, Juan Guillermo",), asesor: ("Mg. Wick, John"), doc) = {
   // Preparar el formato base
   show heading: set text(size: TEXT_SIZE)
   show heading: set block(spacing: 2em)
-  show heading.where(level: 1, outlined: true): h => context {
-    // counter(heading).display("1")
+  show heading.where(level: 1, numbering: "1."): h => context {
     align(center)[Capítulo #counter(heading).display("I"): *#h.body*]
-    // repr(h)
-    /*
-    if (h.numbering == none) { h }
-    else { repr(h) }*/
+  }
+  show heading.where(level: 1): h => {
+    pagebreak()
+    h
   }
   show heading.where(level: 3): emph
-  show figure: set block(spacing: 2em)
+  show figure: set block(spacing: 2em, breakable: false)
   show figure.caption: c => {
     set par(leading: 0.65em)
     emph(c)
@@ -57,9 +42,6 @@
     spacing: 2em,
     indent: 0.5in
   )
-  set heading(
-    numbering: "1."
-  )
   set text(
     lang: "es",
     font: "Times New Roman",
@@ -69,10 +51,10 @@
     number-type: "lining",
     number-width: "tabular"
   )
+  set smartquote(enabled: false)
   set page(
     header: context {
-      let val = int(counter(page).display("1")) - 1
-      if val == 0 [] else { align(right)[*#val*] }
+      align(right)[*#counter(page).display("1")*]
     }
   )
 
@@ -125,24 +107,6 @@
     2024
   ]
 
-  pagebreak()
-
-  // Agregar índice
-  outline(
-    title: [Tabla de Contenido],
-    target: heading.where(level: 1).or(heading.where(level: 2).or(heading.where(level: 3))),
-    indent: 2em
-  )
-
-  pagebreak()
-
-  outline(
-    title: [Lista de Figuras],
-    target: figure.where(kind: image)
-  )
-
-  pagebreak()
-
   // Cuerpo del documento
   for (ie, elem) in doc.children.enumerate() {
     if elem.func() == text {
@@ -154,4 +118,37 @@
       elem
     }
   }
+}
+
+#let figura(imagen, ancho: 75%, alto: auto, leyenda: none) = {
+  let grosor = 1.25pt
+
+  figure(
+    rect(
+      stroke: grosor + rgb("#cccccc"),
+      inset: (grosor / 2) + 1.5pt,
+      image("../media/" + imagen, width: ancho, height: alto)
+    ),
+    caption: leyenda,
+    gap: 2em
+  )
+}
+
+#let tabla(..contenido, columnas: auto, alineamiento: left, título: none) = {
+  figure(
+    {
+      set par(leading: 0.65em)
+
+      table(
+        columns: columnas,
+        align: alineamiento,
+        inset: (y: 0.65em),
+        stroke: (x, y => { (x: 0pt) + if (y == 0) { (y: 1pt) } }),
+        ..value
+      )
+    },
+    caption: título,
+    gap: 2em,
+    placement: none
+  )
 }

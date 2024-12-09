@@ -1,63 +1,41 @@
 #import "./utilidades/formato.typ": formato
+
 #show "UNSA": "Universidad Nacional de San Agustín"
+#show "21500": [norma ISO 21500]
 
 #show: doc => formato(
   doc,
   asesor: "[NOMBRE ASESOR]",
   autores: ("Quispe Huillca, Juan Guillermo",),
-  cabecera: [Propuesta de un Sistema de Gestión de Proyectos y Documentación Basado en Normas ISO]
+  cabecera: [Propuesta de un Sistema de Gestión de Proyectos y Documentación Basado en la 21500]
 )
 
-= Marco Metodológico
+#include "partes/preliminares.typ"
 
-== Descripción de la realidad problemática
+#set heading(numbering: "1.")
 
-== Delimitaciones y definición del problema
+#context {
+  outline(
+    title: [Índice de contenidos],
+    target: heading.where(level: 1).or(heading.where(level: 2).or(heading.where(level: 3))).after(here()) ,
+    indent: 0.5in
+  )
+  outline(
+    title: [Índice de figuras],
+    target: figure.where(kind: image),
+    indent: 0.5in
+  )
 
-=== Delimitaciones
+  outline(
+    title: [Índice de tablas],
+    target: figure.where(kind: table),
+    indent: 0.5in
+  )
+}
 
-=== Definición del problema
+#include "partes/cap01.typ"
+#include "partes/cap02.typ"
+#include "partes/cap03.typ"
+#include "partes/cap04.typ"
 
-== Formulación del problema
-
-== Objetivos de la investigación
-
-=== Objetivo general
-
-Proponer un sistema de gestión de proyectos y documentos basado en normas ISO que ...
-
-=== Objetivos específicos
-
-== Justificación e importancia de la investigación
-
-=== Justificación
-
-La justificación de la investigación reside en la necesidad de abordar 
-
-=== Importancia
-
-La importancia de la investigación 
-
-== Alcances de la investigación
-
-== Limitaciones de la investigación
-
-== Hipótesis de la investigación
-
-=== Hipótesis general
-
-== Variables de la investigación
-
-=== Variable independiente
-
-=== Variable dependiente
-
-== Viabilidad de la investigación
-
-=== Viabilidad técnica
-
-=== Viabilidad operativa
-
-=== Viabilidad económica
-
-== Tipo y diseño de la investigación
+#set heading(numbering: none)
